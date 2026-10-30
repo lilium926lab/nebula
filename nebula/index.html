@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>NEBULA｜マルチプロダクション</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Michroma&family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #04050d;
+        --bg-2: #090c1e;
+        --panel: rgba(13, 16, 36, 0.72);
+        --panel-solid: #0c0f24;
+        --ink: #eceefb;
+        --ink-soft: #c3c8e6;
+        --muted: #8f97bd;
+        --line: rgba(154, 163, 216, 0.22);
+        --line-soft: rgba(154, 163, 216, 0.13);
+        --violet: #9d8cff;
+        --violet-bright: #c0b3ff;
+        --blue: #5ea2ff;
+        --cyan: #83d7f2;
+        --seina: #cfa9ff;
+        --seina-deep: #9d7bea;
+        --atsuki: #7fb0ff;
+        --atsuki-deep: #4d7fd6;
+        --radius: 18px;
+        --font-body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+        --font-display: "Michroma", "Zen Kaku Gothic New", sans-serif;
+        --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.85;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      /* ---------- cosmic backdrop ---------- */
+      .cosmos {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(1100px 620px at 12% -8%, rgba(109, 84, 246, 0.34), transparent 62%),
+          radial-gradient(900px 560px at 88% 12%, rgba(43, 96, 214, 0.30), transparent 60%),
+          radial-gradient(760px 520px at 78% 88%, rgba(146, 52, 190, 0.20), transparent 62%),
+          radial-gradient(620px 480px at 8% 96%, rgba(28, 110, 180, 0.18), transparent 60%),
+          linear-gradient(180deg, #05060f 0%, #070a1a 46%, #04050d 100%);
+      }
+      #starfield {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .cosmos::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(2, 3, 8, 0.55) 100%);
+      }
+
+      main, footer { position: relative; z-index: 2; }
+      .wrap { width: min(1060px, 100% - 40px); margin-inline: auto; }
+
+      /* ---------- hero ---------- */
+      .hero {
+        min-height: 92svh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 72px 20px 56px;
+      }
+      .hero-orbit {
+        width: 74px; height: 74px;
+        margin-bottom: 30px;
+        animation: spin 26s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .hero-kind {
+        font-family: var(--font-display);
+        font-size: 0.78rem;
+        letter-spacing: 0.52em;
+        text-indent: 0.52em;
+        color: var(--cyan);
+        margin: 0 0 20px;
+      }
+      .hero-title {
+        font-family: var(--font-display);
+        font-size: clamp(3.1rem, 13.5vw, 8.6rem);
+        line-height: 1.04;
+        letter-spacing: 0.1em;
+        text-indent: 0.1em;
+        margin: 0;
+        color: #f4f5ff;
+        text-shadow:
+          0 0 22px rgba(157, 140, 255, 0.55),
+          0 0 70px rgba(94, 162, 255, 0.35);
+      }
+      .hero-reading {
+        font-family: var(--font-serif);
+        font-size: clamp(0.95rem, 2.6vw, 1.15rem);
+        letter-spacing: 0.65em;
+        text-indent: 0.65em;
+        color: var(--violet-bright);
+        margin: 18px 0 0;
+      }
+      .hero-rule {
+        width: min(420px, 70vw);
+        height: 1px;
+        margin: 40px auto 36px;
+        background: linear-gradient(90deg, transparent, rgba(192, 179, 255, 0.75), rgba(131, 215, 242, 0.75), transparent);
+        position: relative;
+      }
+      .hero-rule::after {
+        content: "";
+        position: absolute;
+        left: 50%; top: 50%;
+        width: 7px; height: 7px;
+        transform: translate(-50%, -50%) rotate(45deg);
+        background: var(--violet-bright);
+        box-shadow: 0 0 12px rgba(192, 179, 255, 0.9);
+      }
+      .hero-copy {
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: clamp(1.35rem, 4.6vw, 2.1rem);
+        line-height: 1.7;
+        margin: 0;
+        color: #f0f1ff;
+      }
+      .hero-sub {
+        max-width: 620px;
+        margin: 22px auto 0;
+        color: var(--ink-soft);
+        font-size: clamp(0.92rem, 2.6vw, 1.02rem);
+      }
+      .hero-home-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+        padding: 14px 26px;
+        border-radius: 999px;
+        border: 1px solid rgba(131, 215, 242, 0.6);
+        background: linear-gradient(120deg, rgba(43, 96, 214, 0.32), rgba(109, 84, 246, 0.32));
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      }
+      .hero-home-link:hover, .hero-home-link:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(94, 162, 255, 0.35);
+        background: linear-gradient(120deg, rgba(43, 96, 214, 0.48), rgba(109, 84, 246, 0.48));
+      }
+      .hero-home-link .arrow { font-family: var(--font-display); font-size: 0.85em; }
+      .hero-home-link small { display: block; font-weight: 500; font-size: 0.72rem; color: var(--ink-soft); letter-spacing: 0.1em; text-align: left; }
+      .foot-nav { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: center; align-items: center; }
+      .hero-scroll {
+        margin-top: 54px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.4em;
+        text-indent: 0.4em;
+        font-family: var(--font-display);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .hero-scroll::after {
+        content: "";
+        width: 1px; height: 44px;
+        background: linear-gradient(180deg, var(--violet), transparent);
+        animation: drip 2.4s ease-in-out infinite;
+      }
+      @keyframes drip {
+        0%, 100% { transform: scaleY(0.4); opacity: 0.4; transform-origin: top; }
+        50% { transform: scaleY(1); opacity: 1; transform-origin: top; }
+      }
+
+      /* ---------- sections ---------- */
+      section { padding: 84px 0 8px; }
+      .sec-head { margin-bottom: 38px; }
+      .sec-label {
+        font-family: var(--font-display);
+        font-size: 0.7rem;
+        letter-spacing: 0.44em;
+        color: var(--cyan);
+        margin: 0 0 10px;
+      }
+      .sec-title {
+        font-family: var(--font-serif);
+        font-weight: 800;
+        font-size: clamp(1.7rem, 5.4vw, 2.4rem);
+        line-height: 1.4;
+        margin: 0;
+        color: #f2f3ff;
+      }
+      .sec-title .en {
+        font-family: var(--font-display);
+        font-size: 0.52em;
+        letter-spacing: 0.18em;
+        color: var(--violet-bright);
+        margin-left: 0.7em;
+        vertical-align: 0.28em;
+        white-space: nowrap;
+      }
+
+      .reveal { opacity: 1; }
+
+      /* ---------- about ---------- */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 22px;
+        align-items: stretch;
+      }
+      .about-lead {
+        background: var(--panel);
+        border: 1px solid var(--line-soft);
+        border-radius: var(--radius);
+        padding: clamp(24px, 4.5vw, 40px);
+        backdrop-filter: blur(6px);
+      }
+      .about-lead p { margin: 0 0 1.1em; color: var(--ink-soft); }
+      .about-lead p:last-child { margin-bottom: 0; }
+      .about-lead strong { color: #fff; font-weight: 700; }
+      .about-lead .big {
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: clamp(1.12rem, 3.4vw, 1.35rem);
+        line-height: 1.8;
+        color: #f0f1ff;
+      }
+      .about-facts {
+        display: grid;
+        gap: 22px;
+      }
+      .fact {
+        background: var(--panel);
+        border: 1px solid var(--line-soft);
+        border-radius: var(--radius);
+        padding: 22px 26px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        backdrop-filter: blur(6px);
+      }
+      .fact .num {
+        font-family: var(--font-display);
+        font-size: 1.9rem;
+        line-height: 1.1;
+        color: #fff;
+      }
+      .fact .num small { font-size: 0.95rem; color: var(--violet-bright); margin-left: 0.3em; letter-spacing: 0.08em; }
+      .fact .cap { color: var(--muted); font-size: 0.86rem; margin-top: 6px; }
+
+      /* ---------- unit ---------- */
+      .unit-card {
+        position: relative;
+        border-radius: 22px;
+        padding: clamp(28px, 5.5vw, 52px);
+        background:
+          radial-gradient(560px 300px at 88% 0%, rgba(157, 140, 255, 0.20), transparent 65%),
+          radial-gradient(480px 280px at 4% 100%, rgba(94, 162, 255, 0.16), transparent 65%),
+          var(--panel);
+        border: 1px solid var(--line);
+        overflow: hidden;
+        backdrop-filter: blur(6px);
+      }
+      .unit-card::before {
+        content: "✦";
+        position: absolute;
+        right: 26px; top: 18px;
+        color: rgba(192, 179, 255, 0.5);
+        font-size: 1.1rem;
+      }
+      .unit-eyebrow {
+        font-family: var(--font-display);
+        font-size: 0.68rem;
+        letter-spacing: 0.42em;
+        color: var(--cyan);
+        margin: 0 0 14px;
+      }
+      .unit-name {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 6px 20px;
+        margin: 0 0 6px;
+      }
+      .unit-name .kanji {
+        font-family: var(--font-serif);
+        font-weight: 800;
+        font-size: clamp(3rem, 10vw, 4.6rem);
+        line-height: 1.1;
+        color: #fff;
+        text-shadow: 0 0 26px rgba(157, 140, 255, 0.45);
+      }
+      .unit-name .reading {
+        font-family: var(--font-serif);
+        font-size: clamp(1rem, 3vw, 1.25rem);
+        letter-spacing: 0.5em;
+        color: var(--violet-bright);
+      }
+      .unit-members {
+        color: var(--muted);
+        font-size: 0.92rem;
+        letter-spacing: 0.14em;
+        margin: 0 0 22px;
+      }
+      .unit-members b { color: var(--ink); font-weight: 700; }
+      .unit-desc { max-width: 640px; color: var(--ink-soft); margin: 0 0 30px; }
+      .unit-desc strong { color: #fff; }
+      .sheet-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 26px;
+        border-radius: 999px;
+        border: 1px solid rgba(192, 179, 255, 0.55);
+        background: linear-gradient(120deg, rgba(109, 84, 246, 0.28), rgba(43, 96, 214, 0.28));
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.98rem;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        box-shadow: 0 0 0 rgba(157, 140, 255, 0);
+      }
+      .sheet-link:hover, .sheet-link:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(109, 84, 246, 0.35);
+        background: linear-gradient(120deg, rgba(109, 84, 246, 0.42), rgba(43, 96, 214, 0.42));
+      }
+      .sheet-link .arrow { font-family: var(--font-display); font-size: 0.85em; }
+      .sheet-link small { display: block; font-weight: 500; font-size: 0.74rem; color: var(--ink-soft); letter-spacing: 0.1em; }
+
+      /* ---------- characters ---------- */
+      .char-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+      }
+      .char-card {
+        position: relative;
+        border-radius: 22px;
+        padding: clamp(24px, 4.5vw, 38px);
+        background: var(--panel);
+        border: 1px solid var(--line-soft);
+        overflow: hidden;
+        backdrop-filter: blur(6px);
+      }
+      .char-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      }
+      .char-card.seina { --accent: var(--seina); --accent-deep: var(--seina-deep); }
+      .char-card.atsuki { --accent: var(--atsuki); --accent-deep: var(--atsuki-deep); }
+      .char-card .glow {
+        position: absolute;
+        width: 300px; height: 300px;
+        right: -110px; top: -130px;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+        opacity: 0.16;
+        pointer-events: none;
+      }
+      .char-top {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .monogram {
+        flex: none;
+        width: 76px; height: 76px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-family: var(--font-serif);
+        font-weight: 800;
+        font-size: 1.85rem;
+        line-height: 1;
+        padding-bottom: 4px;
+        color: #fff;
+        background:
+          radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.28), transparent 55%),
+          linear-gradient(140deg, var(--accent-deep), #141a3d 78%);
+        border: 1px solid color-mix(in srgb, var(--accent) 65%, transparent);
+        box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 35%, transparent);
+        position: relative;
+      }
+      .monogram::after {
+        content: "✦";
+        position: absolute;
+        right: -4px; top: -6px;
+        font-size: 0.85rem;
+        color: var(--accent);
+        text-shadow: 0 0 8px var(--accent);
+      }
+      .char-name { margin: 0; line-height: 1.3; }
+      .char-name .kanji {
+        font-family: var(--font-serif);
+        font-weight: 800;
+        font-size: 1.9rem;
+        color: #fff;
+      }
+      .char-name .reading { color: var(--accent); font-size: 0.92rem; letter-spacing: 0.3em; margin-left: 0.6em; }
+      .char-catch {
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: 1.02rem;
+        color: var(--ink);
+        margin: 2px 0 0;
+      }
+      .char-unit {
+        display: inline-block;
+        margin-top: 8px;
+        font-size: 0.74rem;
+        letter-spacing: 0.22em;
+        color: var(--muted);
+        border: 1px solid var(--line-soft);
+        border-radius: 999px;
+        padding: 3px 12px;
+      }
+      .spec {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 0 0 20px;
+        position: relative;
+      }
+      .spec div {
+        border: 1px solid var(--line-soft);
+        border-radius: 12px;
+        padding: 9px 6px 7px;
+        text-align: center;
+        background: rgba(6, 8, 20, 0.45);
+      }
+      .spec dt { font-size: 0.68rem; letter-spacing: 0.24em; color: var(--muted); margin: 0 0 2px; }
+      .spec dd { margin: 0; font-weight: 700; font-size: 0.98rem; color: #fff; }
+      .spec dd small { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+      .char-desc { color: var(--ink-soft); font-size: 0.94rem; margin: 0 0 18px; position: relative; }
+      .char-desc strong { color: #fff; }
+      .trait {
+        border-top: 1px dashed var(--line);
+        padding-top: 16px;
+        position: relative;
+      }
+      .trait .t-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        color: var(--accent);
+        margin: 0 0 6px;
+        font-weight: 700;
+      }
+      .trait .t-body {
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: 1.06rem;
+        color: #f2f3ff;
+        margin: 0;
+      }
+      .call {
+        margin-top: 14px;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .call b { color: var(--ink); }
+
+      .relation {
+        margin-top: 22px;
+        border: 1px solid var(--line-soft);
+        border-radius: var(--radius);
+        background: rgba(9, 12, 30, 0.6);
+        padding: clamp(20px, 4vw, 30px) clamp(22px, 4.5vw, 36px);
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      .relation .r-mark {
+        flex: none;
+        font-family: var(--font-serif);
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: #fff;
+        border: 1px solid rgba(192, 179, 255, 0.5);
+        border-radius: 14px;
+        padding: 8px 16px;
+        background: linear-gradient(140deg, rgba(109, 84, 246, 0.25), rgba(43, 96, 214, 0.18));
+        line-height: 1.4;
+      }
+      .relation h3 { margin: 2px 0 8px; font-size: 1rem; letter-spacing: 0.08em; }
+      .relation p { margin: 0; color: var(--ink-soft); font-size: 0.94rem; }
+
+      /* ---------- coming soon ---------- */
+      .soon-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+      }
+      .soon-card {
+        border: 1.5px dashed rgba(154, 163, 216, 0.35);
+        border-radius: 22px;
+        padding: clamp(28px, 5vw, 44px);
+        text-align: center;
+        color: var(--muted);
+        background: rgba(9, 12, 30, 0.35);
+      }
+      .soon-card .star { font-size: 1.5rem; color: rgba(192, 179, 255, 0.65); display: block; margin-bottom: 12px; }
+      .soon-card .en {
+        font-family: var(--font-display);
+        letter-spacing: 0.4em;
+        text-indent: 0.4em;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+        margin: 0 0 8px;
+      }
+      .soon-card p { margin: 0; font-size: 0.9rem; }
+
+      /* ---------- footer ---------- */
+      footer {
+        margin-top: 110px;
+        border-top: 1px solid var(--line-soft);
+        padding: 44px 20px 52px;
+        text-align: center;
+      }
+      .foot-logo {
+        font-family: var(--font-display);
+        letter-spacing: 0.34em;
+        text-indent: 0.34em;
+        font-size: 1.05rem;
+        color: #eef;
+        margin: 0 0 8px;
+      }
+      .foot-sub { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.2em; margin: 0 0 20px; }
+      .foot-link { color: var(--violet-bright); font-size: 0.88rem; text-decoration: none; border-bottom: 1px solid rgba(192, 179, 255, 0.4); padding-bottom: 2px; }
+      .foot-link:hover { color: #fff; }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 760px) {
+        .about-grid, .char-grid, .soon-grid { grid-template-columns: 1fr; }
+        .about-facts { grid-template-columns: 1fr 1fr; gap: 14px; }
+        .fact { padding: 16px 18px; }
+        .fact .num { font-size: 1.45rem; }
+        .relation { flex-direction: column; gap: 12px; }
+        section { padding-top: 64px; }
+        .hero { min-height: 86svh; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .hero-orbit, .hero-scroll::after { animation: none; }
+        .reveal { opacity: 1; transform: none; transition: none; }
+        .sheet-link, .hero-home-link { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cosmos" aria-hidden="true"></div>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+
+    <main>
+      <!-- ===== HERO ===== -->
+      <header class="hero">
+        <svg class="hero-orbit" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+          <circle cx="50" cy="50" r="7" fill="#c0b3ff" />
+          <circle cx="50" cy="50" r="30" stroke="rgba(157,140,255,.45)" stroke-width="1" />
+          <circle cx="50" cy="50" r="45" stroke="rgba(94,162,255,.3)" stroke-width="1" stroke-dasharray="3 6" />
+          <circle cx="80" cy="50" r="3.5" fill="#83d7f2" />
+          <circle cx="50" cy="5" r="2.5" fill="#fff" />
+          <path d="M50 38 L52 48 L62 50 L52 52 L50 62 L48 52 L38 50 L48 48 Z" fill="rgba(255,255,255,.85)" />
+        </svg>
+        <p class="hero-kind">MULTI PRODUCTION</p>
+        <h1 class="hero-title">NEBULA</h1>
+        <p class="hero-reading">ネビュラ ― 星雲</p>
+        <div class="hero-rule" aria-hidden="true"></div>
+        <p class="hero-copy">星が生まれる場所。</p>
+        <p class="hero-sub">
+          ジャンルも世界も違うキャラクターたちが、ここから生まれていく。<br />
+          NEBULAは、すべてのオリジナルキャラクターが所属するマルチプロダクションです。
+        </p>
+        <a class="hero-home-link" href="../nebula-2/">
+          <span>
+            NEBULA 公式ホームページ
+            <small>トップページへ戻る</small>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <p class="hero-scroll">SCROLL</p>
+      </header>
+
+      <div class="wrap">
+        <!-- ===== ABOUT ===== -->
+        <section id="about" aria-labelledby="about-title">
+          <div class="sec-head reveal">
+            <p class="sec-label">ABOUT</p>
+            <h2 class="sec-title" id="about-title">NEBULAについて<span class="en">ABOUT NEBULA</span></h2>
+          </div>
+          <div class="about-grid">
+            <div class="about-lead reveal">
+              <p class="big">星雲の中で星が生まれるように、<br />NEBULAからキャラクターが生まれていく。</p>
+              <p>
+                NEBULAは、オリジナルキャラクターたちが所属する<strong>共通のマルチプロダクション</strong>です。
+                特定のジャンルや世界観に縛られず、現代のSNSユニットから、まだ見ぬ世界の住人まで――
+                生まれるキャラクターは誰でも、ここに所属できます。
+              </p>
+              <p>
+                ユニットとして組んで活動する者、ひとりで星のように輝く者。
+                形は違っても、すべてのキャラクターの「所属」はNEBULA。
+                メンバーはこれからも増えていきます。
+              </p>
+            </div>
+            <div class="about-facts reveal">
+              <div class="fact">
+                <span class="num">1<small>UNIT</small></span>
+                <span class="cap">所属ユニット：星涼</span>
+              </div>
+              <div class="fact">
+                <span class="num">2<small>STARS</small></span>
+                <span class="cap">所属キャラクター：星奈／涼希</span>
+              </div>
+              <div class="fact">
+                <span class="num">∞<small>GENRE</small></span>
+                <span class="cap">ジャンル・世界観は不問。これからも拡大中</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== UNIT ===== -->
+        <section id="unit" aria-labelledby="unit-title">
+          <div class="sec-head reveal">
+            <p class="sec-label">UNIT</p>
+            <h2 class="sec-title" id="unit-title">所属ユニット<span class="en">UNIT</span></h2>
+          </div>
+          <article class="unit-card reveal">
+            <p class="unit-eyebrow">UNIT 01 ― SNS UNIT</p>
+            <h3 class="unit-name">
+              <span class="kanji">星涼</span>
+              <span class="reading">ほしすず</span>
+            </h3>
+            <p class="unit-members">MEMBER ― <b>星奈</b>（せいな） × <b>涼希</b>（あつき）</p>
+            <p class="unit-desc">
+              現代日本を舞台に、<strong>名前だけを公開して活動するSNSユニット</strong>。
+              モデル／クリエイター的に発信しながら、二人ならではの空気感でファンを惹きつける。
+              明るく言葉で引っ張る星奈と、絵文字だけで表現する涼希――正反対の二人が組むからこそ生まれる、唯一無二のユニットです。
+            </p>
+            <a class="sheet-link" href="../space-2/">
+              <span>
+                星涼｜星奈と涼希 設定シート
+                <small>二人の詳しいプロフィール・関係性はこちら</small>
+              </span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </article>
+        </section>
+
+        <!-- ===== CHARACTERS ===== -->
+        <section id="characters" aria-labelledby="char-title">
+          <div class="sec-head reveal">
+            <p class="sec-label">CHARACTERS</p>
+            <h2 class="sec-title" id="char-title">所属キャラクター<span class="en">CHARACTERS</span></h2>
+          </div>
+
+          <div class="char-grid">
+            <article class="char-card seina reveal">
+              <div class="glow" aria-hidden="true"></div>
+              <div class="char-top">
+                <div class="monogram" aria-hidden="true">星</div>
+                <div>
+                  <h3 class="char-name"><span class="kanji">星奈</span><span class="reading">せいな</span></h3>
+                  <p class="char-catch">明るくハツラツ、星涼の太陽。</p>
+                  <span class="char-unit">星涼 ― 言葉で発信する担当</span>
+                </div>
+              </div>
+              <dl class="spec">
+                <div><dt>年齢</dt><dd>25<small>歳</small></dd></div>
+                <div><dt>身長</dt><dd>165<small>cm</small></dd></div>
+                <div><dt>MBTI</dt><dd>ENFP</dd></div>
+              </dl>
+              <p class="char-desc">
+                銀寄りのラベンダー色の長いウェーブ髪に紫の目、頬には星のシール。
+                苗字は<strong>秘密（非公開）</strong>で、公開しているのは名前だけ。
+                SNSでは言葉で明るく発信する表の担当で、涼希の絵文字だけの投稿には「あっきーの翻訳」を付けて届ける。
+              </p>
+              <div class="trait">
+                <p class="t-label">特徴</p>
+                <p class="t-body">映えるポーズを考えて、涼希にさせる。</p>
+                <p class="call">涼希のことは <b>「あっきー」</b> と呼ぶ（星奈だけのあだ名）。</p>
+              </div>
+            </article>
+
+            <article class="char-card atsuki reveal">
+              <div class="glow" aria-hidden="true"></div>
+              <div class="char-top">
+                <div class="monogram" aria-hidden="true">涼</div>
+                <div>
+                  <h3 class="char-name"><span class="kanji">涼希</span><span class="reading">あつき</span></h3>
+                  <p class="char-catch">ダウナーでマイペース、星涼の月。</p>
+                  <span class="char-unit">星涼 ― 絵文字で表現する担当</span>
+                </div>
+              </div>
+              <dl class="spec">
+                <div><dt>年齢</dt><dd>29<small>歳</small></dd></div>
+                <div><dt>身長</dt><dd>180<small>cm</small></dd></div>
+                <div><dt>MBTI</dt><dd>INTP</dd></div>
+              </dl>
+              <p class="char-desc">
+                濃紺〜黒の無造作な短髪が目にかかり、切れ長で眠そうな目、耳にはピアス。
+                苗字は<strong>秘密（非公開）</strong>で、公開しているのは名前だけ。
+                公の場（Xなど）では<strong>絵文字だけで表現</strong>し、言葉で話すのは星奈と話す時だけ。
+              </p>
+              <div class="trait">
+                <p class="t-label">特徴</p>
+                <p class="t-body">言葉は、星奈にだけ。</p>
+                <p class="call">星奈のことは <b>「星奈」</b> と呼び捨て。</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="relation reveal">
+            <div class="r-mark">相方</div>
+            <div>
+              <h3>二人の関係</h3>
+              <p>
+                友達よりも仲がいいけれど、恋人ではない「相方」同士。
+                喋り倒す星奈と、短く鋭い一言（と絵文字）の涼希。
+                呼び方の温度差や二人のやり取りの型など、詳しい関係性は設定シートにまとめています。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== COMING SOON ===== -->
+        <section id="soon" aria-labelledby="soon-title">
+          <div class="sec-head reveal">
+            <p class="sec-label">COMING SOON</p>
+            <h2 class="sec-title" id="soon-title">新しい星たち<span class="en">COMING SOON</span></h2>
+          </div>
+          <div class="soon-grid">
+            <div class="soon-card reveal">
+              <span class="star" aria-hidden="true">✦</span>
+              <p class="en">NEW STAR</p>
+              <p>新しいキャラクターが、ここに生まれる予定です。</p>
+            </div>
+            <div class="soon-card reveal">
+              <span class="star" aria-hidden="true">✦</span>
+              <p class="en">NEW UNIT</p>
+              <p>新しいユニットの結成も、星雲の中で準備中。</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <p class="foot-logo">NEBULA</p>
+      <p class="foot-sub">MULTI PRODUCTION ― 星が生まれる場所</p>
+      <nav class="foot-nav" aria-label="関連ページ">
+        <a class="foot-link" href="../nebula-2/">NEBULA 公式ホームページ</a>
+        <a class="foot-link" href="../space-2/">星涼｜星奈と涼希 設定シート</a>
+      </nav>
+    </footer>
+
+    <script>
+      (function () {
+        var canvas = document.getElementById("starfield");
+        var ctx = canvas.getContext("2d");
+        var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var stars = [];
+        var meteors = [];
+        var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        function resize() {
+          W = window.innerWidth; H = window.innerHeight;
+          canvas.width = W * dpr; canvas.height = H * dpr;
+          canvas.style.width = W + "px"; canvas.style.height = H + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          build();
+        }
+
+        function build() {
+          stars = [];
+          var count = Math.min(190, Math.floor((W * H) / 8500));
+          var tints = ["255,255,255", "255,255,255", "192,179,255", "131,215,242", "158,180,255"];
+          for (var i = 0; i < count; i++) {
+            stars.push({
+              x: Math.random() * W,
+              y: Math.random() * H,
+              r: Math.random() * 1.4 + 0.3,
+              base: Math.random() * 0.55 + 0.25,
+              amp: Math.random() * 0.4 + 0.1,
+              speed: Math.random() * 0.9 + 0.25,
+              phase: Math.random() * Math.PI * 2,
+              tint: tints[Math.floor(Math.random() * tints.length)]
+            });
+          }
+        }
+
+        function drawStar(s, t) {
+          var a = s.base + Math.sin(t * 0.001 * s.speed + s.phase) * s.amp;
+          if (a < 0.03) a = 0.03;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(" + s.tint + "," + a.toFixed(3) + ")";
+          ctx.fill();
+          if (s.r > 1.15) {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r * 3.2, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(" + s.tint + "," + (a * 0.10).toFixed(3) + ")";
+            ctx.fill();
+          }
+        }
+
+        function spawnMeteor() {
+          meteors.push({
+            x: Math.random() * W * 0.7 + W * 0.25,
+            y: Math.random() * H * 0.3,
+            vx: -(Math.random() * 5 + 6),
+            vy: Math.random() * 3 + 3.4,
+            life: 1
+          });
+        }
+
+        function frame(t) {
+          ctx.clearRect(0, 0, W, H);
+          for (var i = 0; i < stars.length; i++) drawStar(stars[i], t);
+          for (var j = meteors.length - 1; j >= 0; j--) {
+            var m = meteors[j];
+            m.x += m.vx; m.y += m.vy; m.life -= 0.012;
+            if (m.life <= 0 || m.x < -80 || m.y > H + 80) { meteors.splice(j, 1); continue; }
+            var grad = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * 9, m.y - m.vy * 9);
+            grad.addColorStop(0, "rgba(255,255,255," + (0.85 * m.life).toFixed(3) + ")");
+            grad.addColorStop(1, "rgba(160,180,255,0)");
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.moveTo(m.x, m.y);
+            ctx.lineTo(m.x - m.vx * 9, m.y - m.vy * 9);
+            ctx.stroke();
+          }
+          if (Math.random() < 0.0035 && meteors.length < 2) spawnMeteor();
+          requestAnimationFrame(frame);
+        }
+
+        resize();
+        window.addEventListener("resize", resize);
+        if (reduced) {
+          ctx.clearRect(0, 0, W, H);
+          for (var i = 0; i < stars.length; i++) drawStar(stars[i], 800);
+        } else {
+          requestAnimationFrame(frame);
+        }
+
+        /* reveal on scroll */
+        var targets = document.querySelectorAll(".reveal");
+        if (reduced || !("IntersectionObserver" in window)) {
+          for (var k = 0; k < targets.length; k++) targets[k].classList.add("in");
+        } else {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+            });
+          }, { threshold: 0.12 });
+          targets.forEach(function (el) { io.observe(el); });
+        }
+      })();
+    </script>
+  </body>
+</html>
